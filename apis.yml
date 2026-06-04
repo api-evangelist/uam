@@ -1,0 +1,82 @@
+---
+aid: uam
+name: Autonomous University of Madrid
+description: >-
+  The Autonomous University of Madrid (Universidad Autónoma de Madrid, UAM) is a
+  public research university in Madrid, Spain, founded in 1968 and ranked #198 in
+  the QS World University Rankings 2025. Its primary public, machine-readable API
+  footprint is delivered through Biblos-e Archivo, the UAM institutional repository
+  running DSpace 7.6.5, which exposes a HAL-based REST API and an OAI-PMH 2.0
+  metadata-harvesting endpoint. UAM does not publish a centralized developer portal;
+  authentication is handled through the gated ID-UAM federated identity service, and
+  most institutional systems (secretaria virtual, mobile app backend) are not openly
+  documented.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/uam/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Spain
+  - Open Access
+  - Institutional Repository
+  - DSpace
+  - OAI-PMH
+  - Research
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: uam:biblos-rest
+    name: Biblos-e Archivo REST API (DSpace 7)
+    description: >-
+      HAL-based REST API for Biblos-e Archivo, the UAM institutional repository,
+      running DSpace 7.6.5. Provides programmatic, HATEOAS-navigable access to
+      communities, collections, items, bitstreams, search, and configuration for
+      UAM's open-access scientific, teaching, and academic output (theses, articles,
+      journals, learning materials). Confirmed live with dspaceVersion "DSpace 7.6.5".
+    humanURL: https://repositorio.uam.es/
+    baseURL: https://repositorio.uam.es/server/api
+    tags: [ Institutional Repository, DSpace, REST, Open Access, Research, Library ]
+    properties:
+      - type: Documentation
+        url: https://repositorio.uam.es/server/api
+      - type: Documentation
+        url: https://biblioguias.uam.es/repositorio
+  - aid: uam:biblos-oai
+    name: Biblos-e Archivo OAI-PMH Endpoint
+    description: >-
+      OAI-PMH 2.0 metadata-harvesting endpoint for Biblos-e Archivo. Supports
+      Identify, ListRecords, ListSets, and other standard OAI verbs for harvesting
+      Dublin Core and other metadata formats from the UAM DSpace repository. Confirmed
+      live (repositoryName "Biblos-e Archivo. Repositorio Institucional de la UAM",
+      protocolVersion 2.0, granularity YYYY-MM-DDThh:mm:ssZ).
+    humanURL: https://repositorio.uam.es/
+    baseURL: https://repositorio.uam.es/server/oai/request
+    tags: [ Institutional Repository, OAI-PMH, Metadata, Harvesting, Open Access, Research ]
+    properties:
+      - type: Documentation
+        url: https://repositorio.uam.es/server/oai/request?verb=Identify
+      - type: Documentation
+        url: https://biblioguias.uam.es/repositorio
+common:
+  - type: Website
+    url: https://www.uam.es/
+  - type: LinkedIn
+    url: https://es.linkedin.com/school/universidad-autonoma-de-madrid/
+  - type: Authentication
+    url: https://id.uam.es/
+  - type: Plans
+    url: plans/uam-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/uam-rate-limits.yml
+  - type: FinOps
+    url: finops/uam-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

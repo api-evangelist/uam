@@ -1,0 +1,41 @@
+---
+name: Autonomous University of Madrid
+description: Autonomous University of Madrid public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/uam/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      UAM has no centralized developer portal, but it operates a genuine,
+      live, machine-readable API surface through Biblos-e Archivo, its DSpace
+      7.6.5 institutional repository. Both the DSpace REST API root (reporting
+      dspaceVersion "DSpace 7.6.5") and the OAI-PMH 2.0 endpoint (reporting
+      repositoryName "Biblos-e Archivo. Repositorio Institucional de la UAM",
+      protocolVersion 2.0) were verified live via content fetch. Direct curl
+      probes returned HTTP 403 due to bot/WAF filtering, but the endpoints
+      resolve and return valid payloads. Identity is handled by the gated
+      ID-UAM federated service (not a documented public API). No official
+      institutional GitHub organization was found (only research-group and
+      student-club accounts). Nothing was fabricated; only confirmed surfaces
+      are cataloged.
+    endpoints:
+      - url: https://repositorio.uam.es/server/api
+        status: 200
+        note: DSpace 7.6.5 REST API root, HAL links confirmed via fetch (curl 403 via WAF).
+      - url: https://repositorio.uam.es/server/oai/request?verb=Identify
+        status: 200
+        note: OAI-PMH 2.0 Identify confirmed via fetch (curl 403 via WAF).
+      - url: https://repositorio.uam.es/
+        status: 200
+        note: Biblos-e Archivo repository home, live (curl 403 via WAF).
+      - url: https://www.uam.es/
+        status: 302
+        note: Official university website, redirects to localized landing.
+      - url: https://id.uam.es/
+        status: 200
+        note: ID-UAM federated identity service; gated SSO, not a public API.
+      - url: https://biblioguias.uam.es/repositorio
+        status: 200
+        note: Library guide documenting Biblos-e Archivo repository.
