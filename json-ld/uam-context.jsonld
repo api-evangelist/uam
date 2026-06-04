@@ -1,0 +1,41 @@
+{
+  "@context": {
+    "schema": "https://schema.org/",
+    "uam": "https://repositorio.uam.es/vocab#",
+    "@vocab": "https://schema.org/",
+    "name": "schema:name",
+    "url": "schema:url",
+    "description": "schema:description",
+    "identifier": "schema:identifier",
+    "sameAs": "schema:sameAs",
+    "foundingDate": "schema:foundingDate",
+    "address": "schema:address",
+    "email": "schema:email"
+  },
+  "@type": "schema:CollegeOrUniversity",
+  "@id": "https://www.uam.es/",
+  "name": "Autonomous University of Madrid",
+  "alternateName": "Universidad Autónoma de Madrid",
+  "url": "https://www.uam.es/",
+  "foundingDate": "1968",
+  "description": "Public research university in Madrid, Spain. Its public, machine-readable API footprint is delivered through Biblos-e Archivo, the UAM institutional repository (DSpace 7.6.5), which exposes a HAL-based REST API and an OAI-PMH 2.0 metadata-harvesting endpoint.",
+  "sameAs": [
+    "https://es.linkedin.com/school/universidad-autonoma-de-madrid/"
+  ],
+  "subjectOf": [
+    {
+      "@type": "schema:WebAPI",
+      "name": "Biblos-e Archivo REST API (DSpace 7)",
+      "url": "https://repositorio.uam.es/server/api",
+      "description": "HAL-based REST API for the UAM institutional repository (DSpace 7.6.5).",
+      "documentation": "https://biblioguias.uam.es/repositorio"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "name": "Biblos-e Archivo OAI-PMH Endpoint",
+      "url": "https://repositorio.uam.es/server/oai/request",
+      "description": "OAI-PMH 2.0 metadata-harvesting endpoint for the UAM DSpace repository.",
+      "documentation": "https://repositorio.uam.es/server/oai/request?verb=Identify"
+    }
+  ]
+}
