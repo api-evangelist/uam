@@ -1,16 +1,25 @@
 ---
 aid: uam
 name: Autonomous University of Madrid
+x-type: university
+x-category: Public Research University
 description: >-
-  The Autonomous University of Madrid (Universidad Autónoma de Madrid, UAM) is a
-  public research university in Madrid, Spain, founded in 1968 and ranked #198 in
-  the QS World University Rankings 2025. Its primary public, machine-readable API
-  footprint is delivered through Biblos-e Archivo, the UAM institutional repository
-  running DSpace 7.6.5, which exposes a HAL-based REST API and an OAI-PMH 2.0
-  metadata-harvesting endpoint. UAM does not publish a centralized developer portal;
-  authentication is handled through the gated ID-UAM federated identity service, and
-  most institutional systems (secretaria virtual, mobile app backend) are not openly
-  documented.
+  The Autonomous University of Madrid (Universidad Autónoma de Madrid, UAM) is a public
+  research university in Madrid, Spain, founded in 1968 and ranked #198 in the QS World
+  University Rankings 2025. UAM publishes no developer portal, no API terms and no OpenAPI
+  description of anything, and it issues no API keys — but unlike most institutions in this
+  cohort its machine-readable surfaces are genuinely its own rather than a vendor's contract
+  running under its name. Every host carrying a surface below resolves inside RIPE inetnum
+  150.244.0.0 – 150.244.255.255, netname UAM, org ORG-UADM1-RIPE, with no CNAME to a vendor
+  platform: UAM licenses DSpace, Open Journal Systems and Moodle and runs them on its own
+  address space. What is anonymously consumable today is the Biblos-e Archivo repository
+  (a DSpace 7.6.5 HAL REST API, an OAI-PMH 2.0 endpoint and an OpenSearch descriptor) and a
+  second OAI-PMH 2.0 endpoint over the university's Open Journal Systems journals portal at
+  revistas.uam.es. Beyond that, UAM operates a Shibboleth service provider on its own
+  repository host, is registered as an identity provider in SIR/eduGAIN through RedIRIS, runs
+  two Moodle instances that publish live LTI 1.3 signing keys, and is a Crossref member minting
+  DOIs under prefix 10.15366. No vendor product specification is stored in this repository:
+  a generic DSpace, OJS or Moodle contract describes the vendor's engineering, not UAM's.
 type: Index
 deliveryModel:
   model: saas
@@ -40,60 +49,280 @@ access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/uam.png
 url: https://raw.githubusercontent.com/api-evangelist/uam/refs/heads/main/apis.yml
 tags:
-  - Education
-  - Higher Education
   - University
+  - Higher Education
+  - Education
   - Spain
-  - Open Access
+  - Public Research University
   - Institutional Repository
-  - DSpace
+  - Research Data
+  - Open Access
   - OAI-PMH
-  - Research
+  - Identity Federation
+  - Learning Management
+  - DSpace
+  - Open Journal Systems
+  - Shibboleth
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 specificationVersion: '0.23'
 apis:
   - aid: uam:biblos-rest
     name: Biblos-e Archivo REST API (DSpace 7)
     description: >-
-      HAL-based REST API for Biblos-e Archivo, the UAM institutional repository,
-      running DSpace 7.6.5. Provides programmatic, HATEOAS-navigable access to
-      communities, collections, items, bitstreams, search, and configuration for
-      UAM's open-access scientific, teaching, and academic output (theses, articles,
-      journals, learning materials). Confirmed live with dspaceVersion "DSpace 7.6.5".
+      HAL-based REST API for Biblos-e Archivo, UAM's institutional repository, running DSpace
+      7.6.5. Anonymously readable, HATEOAS-navigable access to communities, collections, items,
+      bitstreams, discovery search and configuration covering the university's open-access
+      scientific, teaching and academic output. The entry document reports dspaceName
+      "Biblos-e Archivo. Repositorio Institucional de la UAM" and dspaceVersion "DSpace 7.6.5",
+      and an OpenSearch 1.1 description document is published alongside it. Write access is
+      challenged with Shibboleth against UAM's own service provider. The software is DSpace's;
+      the deployment, the host, the content and the Handle prefix 10486 are UAM's, which is why
+      the deployment is recorded here and DSpace's generic product specification is not.
     humanURL: https://repositorio.uam.es/
     baseURL: https://repositorio.uam.es/server/api
-    tags: [ Institutional Repository, DSpace, REST, Open Access, Research, Library ]
+    tags: [ Institutional Repository, DSpace, REST, HAL, Open Access, Research Data, Library ]
     properties:
       - type: Documentation
-        url: https://repositorio.uam.es/server/api
-      - type: Documentation
-        url: https://biblioguias.uam.es/repositorio
+        url: https://www.uam.es/uam/vida-universitaria/bibliotecas/repositorio
+      - type: Examples
+        url: examples/index.yml
+      - type: Authentication
+        url: authentication/uam-authentication.yml
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+      - type: OpenSearch
+        url: https://repositorio.uam.es/server/opensearch/service
+    x-operator: institution
+    x-operator-evidence: >-
+      repositorio.uam.es resolves to 150.244.214.23, inside RIPE inetnum 150.244.0.0 –
+      150.244.255.255, netname UAM, org ORG-UADM1-RIPE, descr "Universidad Autonoma de Madrid".
+      No CNAME. Self-published Shibboleth SP metadata at /Shibboleth.sso/Metadata with entityID
+      https://repositorio.uam.es/shibboleth.
+    x-access: public
+    x-status: '200 application/hal+json (probed 2026-09-01)'
   - aid: uam:biblos-oai
     name: Biblos-e Archivo OAI-PMH Endpoint
     description: >-
-      OAI-PMH 2.0 metadata-harvesting endpoint for Biblos-e Archivo. Supports
-      Identify, ListRecords, ListSets, and other standard OAI verbs for harvesting
-      Dublin Core and other metadata formats from the UAM DSpace repository. Confirmed
-      live (repositoryName "Biblos-e Archivo. Repositorio Institucional de la UAM",
-      protocolVersion 2.0, granularity YYYY-MM-DDThh:mm:ssZ).
+      OAI-PMH 2.0 metadata-harvesting endpoint for Biblos-e Archivo. Identify returns
+      repositoryName "Biblos-e Archivo. Repositorio Institucional de la UAM", baseURL
+      https://repositorio.uam.es/server/oai/request, protocolVersion 2.0, adminEmail
+      biblosearchivo.biblioteca@uam.es, earliestDatestamp 2009-01-17 and granularity
+      YYYY-MM-DDThh:mm:ssZ, with repositoryIdentifier repositorio.uam.es. Anonymous, no
+      credential of any kind, and the most consumable contract UAM publishes.
     humanURL: https://repositorio.uam.es/
     baseURL: https://repositorio.uam.es/server/oai/request
-    tags: [ Institutional Repository, OAI-PMH, Metadata, Harvesting, Open Access, Research ]
+    tags: [ Institutional Repository, OAI-PMH, Metadata, Harvesting, Open Access, Research Data ]
     properties:
       - type: Documentation
         url: https://repositorio.uam.es/server/oai/request?verb=Identify
+      - type: Examples
+        url: examples/uam-biblos-oai-identify-example.xml
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+    x-operator: institution
+    x-operator-evidence: >-
+      Same host and address space as the repository REST API; adminEmail is a uam.es address and
+      repositoryIdentifier is repositorio.uam.es.
+    x-access: public
+    x-status: '200 text/xml (probed 2026-09-01)'
+  - aid: uam:revistas-oai
+    name: Portal de Revistas Electrónicas de la UAM — OAI-PMH Endpoint
+    description: >-
+      OAI-PMH 2.0 endpoint over the university's Open Journal Systems 3.3.0.6 installation,
+      which hosts UAM's electronic journals under a UAM-built theme ("cantoblanco"). Identify
+      returns repositoryName "Portal de revistas electrónicas de la UAM", adminEmail
+      admin.erevistas@uam.es and earliestDatestamp 2015-01-28; ListSets enumerates each journal
+      as a set. A second, entirely separate institution-operated harvesting surface from the
+      repository, and one that was not previously catalogued. Note the fetch condition: browser
+      User-Agents receive an Anubis proof-of-work challenge that answers HTTP 200 on every path
+      including nonexistent ones, so this endpoint must be probed with a plain User-Agent or the
+      surface reads as a soft-200 everywhere.
+    humanURL: https://revistas.uam.es/
+    baseURL: https://revistas.uam.es/index.php/index/oai
+    tags: [ Journals, Open Journal Systems, OAI-PMH, Metadata, Harvesting, Open Access, Scholarly Publishing ]
+    properties:
       - type: Documentation
-        url: https://biblioguias.uam.es/repositorio
+        url: https://revistas.uam.es/index.php/index/oai?verb=Identify
+      - type: Examples
+        url: examples/uam-revistas-oai-identify-example.xml
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+    x-operator: institution
+    x-operator-evidence: >-
+      revistas.uam.es resolves to 150.244.214.63 in UAM's own RIPE allocation, with no CNAME.
+      The OJS installation carries a UAM-specific theme and a uam.es admin address.
+    x-access: public
+    x-status: '200 text/xml with a plain User-Agent; Anubis challenge for browser User-Agents (probed 2026-09-01)'
+  - aid: uam:idp-federation
+    name: UAM Identity Provider — SIR / eduGAIN SAML 2.0 Metadata
+    description: >-
+      UAM's SAML 2.0 identity in SIR, the Servicio de Identidad de RedIRIS, Spain's national
+      research and education federation and an eduGAIN participant. entityID
+      https://www.rediris.es/sir/uamidp, shibmd:Scope uam.es, OrganizationURL https://www.uam.es/,
+      REFEDS Sirtfi assurance certification and the REFEDS Research and Scholarship entity
+      category; first seen in eduGAIN 2017-04-13. SSO and SLO terminate on
+      sir.rediris.es/uam/saml2/idp/, so the endpoints and the metadata are RedIRIS's while the
+      asserted identity is UAM's. The other half of the surface is entirely UAM's: a Shibboleth
+      service provider on repositorio.uam.es publishing its own metadata and a discovery feed.
+    humanURL: https://www.rediris.es/sir/
+    baseURL: https://technical.edugain.org/api.php?action=show_entity&entityid=https%3A%2F%2Fwww.rediris.es%2Fsir%2Fuamidp&format=json
+    tags: [ Identity Federation, SAML, Shibboleth, eduGAIN, SIR, RedIRIS, Single Sign-On ]
+    properties:
+      - type: IdentityFederation
+        url: identity-federation/uam-identity-federation.yml
+      - type: Documentation
+        url: https://www.rediris.es/sir/
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+      - type: ServiceProviderMetadata
+        url: https://repositorio.uam.es/Shibboleth.sso/Metadata
+    x-operator: federation
+    x-operator-evidence: >-
+      Registration authority http://www.rediris.es/, federation code SIR. Recorded, never
+      deleted: a federation entry is shared by definition and the identity it asserts is UAM's.
+      The paired service provider https://repositorio.uam.es/shibboleth is x-operator institution
+      on UAM address space.
+    x-access: public
+    x-status: '200 text/xml SAML EntityDescriptor (probed 2026-09-01)'
+  - aid: uam:moodle-lti
+    name: UAM Moodle — LTI 1.3 Platform and Web Services
+    description: >-
+      UAM self-hosts two Moodle learning platforms, Grado 2026/27 at moodle.uam.es and Posgrado
+      at posgrado.uam.es, both acting as LTI 1.3 / LTI Advantage platforms. Each publishes live
+      public signing keys at /mod/lti/certs.php (RS256 RSA, kid 3ef1afab74110b0d11ed on the Grado
+      instance), an OIDC authorization endpoint at /mod/lti/auth.php and an access-token service
+      at /mod/lti/token.php that returns a well-formed OAuth error to an unsigned request. The
+      Moodle web services REST endpoint is enabled and answering with a Moodle invalidtoken
+      exception, meaning tokens exist but are issued only by UAM administrators. Recorded as one
+      surface rather than split per protocol: it is one deployment, and splitting it would
+      inflate the footprint the way this cohort was inflated before.
+    humanURL: https://moodle.uam.es/
+    baseURL: https://moodle.uam.es/mod/lti/
+    tags: [ Learning Management, Moodle, LTI, LTI Advantage, JWKS, Course Delivery, Gated ]
+    properties:
+      - type: JWKS
+        url: https://moodle.uam.es/mod/lti/certs.php
+      - type: Examples
+        url: examples/uam-moodle-lti-jwks-example.json
+      - type: Authentication
+        url: authentication/uam-authentication.yml
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+    x-operator: institution
+    x-operator-evidence: >-
+      moodle.uam.es 150.244.214.5 and posgrado.uam.es 150.244.214.56, both in UAM's own RIPE
+      allocation with no CNAME. The signing keys are generated by UAM's own installation, not a
+      shared vendor document.
+    x-access: gated
+    x-status: '200 application/json JWKS; token endpoint 400 invalid_request on unsigned POST (probed 2026-09-01)'
+  - aid: uam:crossref-member
+    name: Crossref Membership — Servicio de Publicaciones de la UAM
+    description: >-
+      UAM's publications service is a Crossref member (member id 6788) and mints DOIs under
+      prefix 10.15366, with 10,886 DOIs registered at time of probe (1,557 current, 9,329
+      backfile), predominantly for the journals hosted on revistas.uam.es. Recorded as a
+      registry membership — a fact about UAM — and not as a contract: Crossref's own API belongs
+      to Crossref. A legally separate foundation, FUAM, holds member id 10309 and prefix 10.24217
+      with its own ROR record, and is not counted as the university's membership.
+    humanURL: https://www.crossref.org/
+    baseURL: https://api.crossref.org/members/6788
+    tags: [ Persistent Identifiers, DOI, Crossref, Scholarly Publishing, Registry, Membership ]
+    properties:
+      - type: Documentation
+        url: https://api.crossref.org/members/6788
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+    x-operator: registry
+    x-operator-evidence: >-
+      api.crossref.org/members/6788 returns primary-name "Servicio de Publicaciones de la
+      Universidad Autonoma de Madrid" with prefix 10.15366. The registry is shared by every
+      member; the membership is UAM's.
+    x-access: public
+    x-status: '200 application/json (probed 2026-09-01)'
+  - aid: uam:ror
+    name: ROR Registration — Universidad Autónoma de Madrid
+    description: >-
+      UAM's Research Organization Registry identifier, https://ror.org/01cby8j38, the canonical
+      machine-readable identifier for the institution across scholarly infrastructure. Recorded
+      as a registry membership; ROR's own API is ROR's.
+    humanURL: https://ror.org/01cby8j38
+    baseURL: https://api.ror.org/organizations/01cby8j38
+    tags: [ Persistent Identifiers, ROR, Organization Identifier, Registry, Membership ]
+    properties:
+      - type: Documentation
+        url: https://ror.org/01cby8j38
+      - type: Conformance
+        url: conformance/uam-conformance.yml
+    x-operator: registry
+    x-operator-evidence: >-
+      api.ror.org returns id https://ror.org/01cby8j38 with ror_display "Universidad Autónoma de
+      Madrid" and website https://www.uam.es.
+    x-access: public
+    x-status: '200 (probed 2026-09-01)'
+  - aid: uam:biblioguias
+    name: Biblioguías UAM — Springshare LibGuides Tenancy
+    description: >-
+      The UAM library's research-guide platform. biblioguias.uam.es is a UAM hostname CNAMEd to
+      region-eu.libguides.com, Springshare's EU LibGuides service — an institution-specific
+      tenancy on a vendor platform. The guides and their content are UAM's; the platform, the
+      software and any API are Springshare's, so no contract is stored here. Recorded because a
+      tenancy is a real institutional fact and one of the few programmable surfaces most
+      universities have.
+    humanURL: https://biblioguias.uam.es/
+    baseURL: https://biblioguias.uam.es/
+    tags: [ Library, Research Guides, LibGuides, Springshare, Tenant ]
+    properties:
+      - type: Documentation
+        url: https://biblioguias.uam.es/
+    x-operator: tenant
+    x-operator-evidence: >-
+      biblioguias.uam.es CNAMEs to region-eu.libguides.com (Springshare's EU LibGuides cluster),
+      resolving to 34.254.34.59 / 34.251.228.145 — outside UAM's 150.244.0.0/16. The served page
+      carries Springshare and LibGuides branding. Recorded as a tenancy, not deleted.
+    x-access: public
+    x-status: '200 (probed 2026-09-01)'
+  - aid: uam:biblioagenda
+    name: BiblioAgenda UAM — Springshare LibCal Tenancy
+    description: >-
+      The UAM library's room-booking, appointment and opening-hours platform. biblioagenda.uam.es
+      is a UAM hostname CNAMEd to region-eu.libcal.com, Springshare's EU LibCal service. Campus
+      space and hours data are UAM's; the platform and its API are Springshare's. Recorded as a
+      tenancy, with no vendor contract stored.
+    humanURL: https://biblioagenda.uam.es/
+    baseURL: https://biblioagenda.uam.es/
+    tags: [ Campus Life, Room Booking, Library Hours, LibCal, Springshare, Tenant ]
+    properties:
+      - type: Documentation
+        url: https://biblioagenda.uam.es/hours.php
+    x-operator: tenant
+    x-operator-evidence: >-
+      biblioagenda.uam.es CNAMEs to region-eu.libcal.com (Springshare's EU LibCal cluster),
+      resolving to 63.33.224.20 — outside UAM's 150.244.0.0/16. The served page carries
+      Springshare and LibCal branding. Recorded as a tenancy, not deleted.
+    x-access: public
+    x-status: '200 (probed 2026-09-01)'
 common:
-  - type: DomainSecurity
-    url: security/uam-domain-security.yml
   - type: Website
     url: https://www.uam.es/
-  - type: LinkedIn
-    url: https://es.linkedin.com/school/universidad-autonoma-de-madrid/
-  - type: Authentication
+  - type: ResearchRepository
+    url: https://repositorio.uam.es/
+  - type: IdentityFederation
+    url: identity-federation/uam-identity-federation.yml
+  - type: Documentation
+    url: https://www.uam.es/uam/vida-universitaria/bibliotecas/repositorio
+  - type: SingleSignOn
     url: https://id.uam.es/
+  - type: Authentication
+    url: authentication/uam-authentication.yml
+  - type: Conformance
+    url: conformance/uam-conformance.yml
+  - type: Examples
+    url: examples/index.yml
+  - type: JSONLD
+    url: json-ld/uam-context.jsonld
+  - type: DomainSecurity
+    url: security/uam-domain-security.yml
   - type: Plans
     url: plans/uam-plans-pricing.yml
   - type: RateLimits
@@ -102,6 +331,86 @@ common:
     url: finops/uam-finops.yml
   - type: Review
     url: review.yml
+  - type: LinkedIn
+    url: https://es.linkedin.com/school/universidad-autonoma-de-madrid/
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    UAM's programmable footprint was reached and read directly, not inferred. Four anonymously
+    readable institution-operated endpoints returned real payloads on probe — the DSpace 7.6.5
+    HAL REST API, its OAI-PMH 2.0 endpoint and its OpenSearch descriptor on repositorio.uam.es,
+    and a second OAI-PMH 2.0 endpoint over the Open Journal Systems journals portal on
+    revistas.uam.es. Three further institution-operated surfaces are live but gated by
+    institutional identity: a Shibboleth service provider on the repository host, the two Moodle
+    instances' LTI 1.3 key and token services, and the Moodle web services endpoint. Two registry
+    memberships (Crossref 10.15366, ROR 01cby8j38) and one federation registration (SIR/eduGAIN)
+    were confirmed against the registries themselves.
+
+    What UAM does not have is equally settled and is stated rather than padded: no developer
+    portal, no published OpenAPI or AsyncAPI for anything, no API terms of service, no API key or
+    OAuth client issuance, no open-data portal (datosabiertos.uam.es and transparencia.uam.es do
+    not resolve; www.uam.es/uam/datos-abiertos returns 404), no DataCite membership
+    (api.datacite.org/clients returns zero matches for "uam" and "autonoma"; the repository issues
+    Handle identifiers under prefix 10486 instead), and no official institutional GitHub
+    organization — github.com/uam has zero public repositories and no name, and every other
+    UAM-named org found is a research group or student society. No SCIM, OneRoster, Ed-Fi, Caliper
+    or QTI endpoint was found.
+
+    Two access conditions were encountered and are recorded as facts about us, not findings about
+    UAM. revistas.uam.es fronts browser User-Agents with an Anubis proof-of-work challenge that
+    answers HTTP 200 on every path including nonexistent ones; probing it with a plain User-Agent
+    dissolved the challenge and revealed the real OJS installation. And portalcientifico.uam.es,
+    the research portal linked from UAM's own library page, resolves to 45.151.245.19 — outside
+    UAM address space, in RIPE-administered NL space — and never completes a TLS handshake
+    (curl exit 28 at 45 s), so it could not be classified and is not recorded as a surface.
+  evidence:
+    - url: https://repositorio.uam.es/server/api
+      status: 200
+    - url: https://repositorio.uam.es/server/oai/request?verb=Identify
+      status: 200
+    - url: https://repositorio.uam.es/server/opensearch/service
+      status: 200
+    - url: https://repositorio.uam.es/Shibboleth.sso/Metadata
+      status: 200
+    - url: https://repositorio.uam.es/Shibboleth.sso/DiscoFeed
+      status: 200
+    - url: https://revistas.uam.es/index.php/index/oai?verb=Identify
+      status: 200
+    - url: https://moodle.uam.es/mod/lti/certs.php
+      status: 200
+    - url: https://moodle.uam.es/webservice/rest/server.php
+      status: 200
+    - url: https://posgrado.uam.es/mod/lti/certs.php
+      status: 200
+    - url: https://technical.edugain.org/api.php?action=show_entity&entityid=https%3A%2F%2Fwww.rediris.es%2Fsir%2Fuamidp&format=json
+      status: 200
+    - url: https://api.crossref.org/members/6788
+      status: 200
+    - url: https://ror.org/01cby8j38
+      status: 200
+    - url: https://hdl.handle.net/api/handles/10486/1
+      status: 200
+    - url: https://www.uam.es/
+      status: 200
+    - url: https://sede.uam.es/
+      status: 200
+    - url: https://id.uam.es/
+      status: 200
+    - url: https://biblioguias.uam.es/
+      status: 200
+    - url: https://biblioagenda.uam.es/
+      status: 200
+    - url: https://www.uam.es/uam/datos-abiertos
+      status: 404
+    - url: https://www.uam.es/.well-known/security.txt
+      status: 404
+    - url: https://www.uam.es/llms.txt
+      status: 404
+    - url: https://portalcientifico.uam.es/es/
+      status: 0
+    - url: https://datosabiertos.uam.es/
+      status: 0
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
