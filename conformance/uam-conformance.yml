@@ -1,0 +1,244 @@
+specification: API Evangelist Domain Standard Conformance
+specificationVersion: '0.1'
+provider: Autonomous University of Madrid
+providerId: uam
+regime: education
+generated: '2026-09-01'
+method: probed
+source: >-
+  Live fetches on 2026-09-01 of https://repositorio.uam.es/server/oai/request?verb=Identify
+  (200), https://revistas.uam.es/index.php/index/oai?verb=Identify (200, plain User-Agent),
+  https://repositorio.uam.es/server/api/authn/status (200, WWW-Authenticate header),
+  https://repositorio.uam.es/Shibboleth.sso/Metadata (200),
+  https://repositorio.uam.es/Shibboleth.sso/DiscoFeed (200),
+  https://moodle.uam.es/mod/lti/certs.php (200), https://moodle.uam.es/mod/lti/auth.php (200),
+  https://moodle.uam.es/mod/lti/token.php (400 invalid_request, POST),
+  https://posgrado.uam.es/mod/lti/certs.php (200), the eduGAIN technical database
+  action=list_entities and action=show_entity for https://www.rediris.es/sir/uamidp (200),
+  https://api.crossref.org/members/6788 (200), https://api.datacite.org/clients (200, zero
+  matches), and https://hdl.handle.net/api/handles/10486/1 (responseCode 1). Operator for
+  every uam.es host was confirmed against RIPE inetnum 150.244.0.0 - 150.244.255.255,
+  netname UAM, org ORG-UADM1-RIPE, descr "Universidad Autonoma de Madrid".
+description: >-
+  Conformance against the Kin Score `education` regime standards list (scim, lti, oneroster,
+  ed-fi, caliper, qti, oai-pmh, shibboleth, saml, orcid, datacite, crossref). Reward-only: a
+  standard is recorded as conformant only where a live, machine-readable UAM surface
+  demonstrates it, and only with the operator that actually runs that surface. Nothing here is
+  inferred from a prose claim on a web page, and nothing is credited from a vendor's product
+  documentation.
+
+  UAM is unusual in this cohort in that its conformant surfaces are genuinely its own. Every
+  host carrying a conformance hit below - repositorio.uam.es, revistas.uam.es, moodle.uam.es,
+  posgrado.uam.es - resolves inside UAM's own RIPE legacy allocation, with no CNAME to a vendor
+  platform and no managed-hosting pattern. UAM buys the software (DSpace, OJS, Moodle) and runs
+  it itself; the deployments and the endpoints are UAM's, which is why the surfaces are recorded
+  here while the vendors' generic product specifications are deliberately not stored in this
+  repository.
+
+conforms:
+- standard: oai-pmh
+  name: OAI-PMH 2.0
+  status: conformant
+  x-operator: institution
+  confidence: high
+  evidence:
+  - url: https://repositorio.uam.es/server/oai/request?verb=Identify
+    status: 200
+    content_type: text/xml;charset=UTF-8
+    locations:
+    - 'OAI-PMH/Identify/protocolVersion = 2.0'
+    - 'OAI-PMH/Identify/repositoryName = "Biblos-e Archivo. Repositorio Institucional de la UAM"'
+    - 'OAI-PMH/Identify/baseURL = https://repositorio.uam.es/server/oai/request'
+    - 'OAI-PMH/Identify/adminEmail = biblosearchivo.biblioteca@uam.es'
+    - 'OAI-PMH/Identify/granularity = YYYY-MM-DDThh:mm:ssZ'
+    - 'oai-identifier/repositoryIdentifier = repositorio.uam.es'
+    local_copy: examples/uam-biblos-oai-identify-example.xml
+  - url: https://revistas.uam.es/index.php/index/oai?verb=Identify
+    status: 200
+    content_type: text/xml;charset=utf-8
+    locations:
+    - 'OAI-PMH/Identify/protocolVersion = 2.0'
+    - 'OAI-PMH/Identify/repositoryName = "Portal de revistas electronicas de la UAM"'
+    - 'OAI-PMH/Identify/adminEmail = admin.erevistas@uam.es'
+    - 'OAI-PMH/Identify/earliestDatestamp = 2015-01-28T14:06:43Z'
+    local_copy: examples/uam-revistas-oai-identify-example.xml
+    caveat: >-
+      Must be fetched with a non-browser User-Agent. Browser User-Agents receive an Anubis
+      proof-of-work challenge that answers HTTP 200 on every path including nonexistent ones.
+  note: >-
+    Two independent, anonymously harvestable OAI-PMH 2.0 endpoints on two separate
+    UAM-operated hosts. This is the strongest and most consumable machine-readable surface UAM
+    publishes, and both endpoints returned valid Identify payloads on probe, not link presence.
+
+- standard: shibboleth
+  name: Shibboleth
+  status: conformant
+  x-operator: institution
+  confidence: high
+  evidence:
+  - url: https://repositorio.uam.es/Shibboleth.sso/Metadata
+    status: 200
+    content_type: application/samlmetadata+xml
+    locations:
+    - 'md:EntityDescriptor[@entityID="https://repositorio.uam.es/shibboleth"]'
+    - 'Shibboleth SP native metadata handler at /Shibboleth.sso/Metadata'
+    local_copy: identity-federation/uam-repositorio-sp-saml-metadata.xml
+  - url: https://repositorio.uam.es/Shibboleth.sso/DiscoFeed
+    status: 200
+    content_type: application/json
+    locations:
+    - '[0].entityID = IDP_UAM'
+  - url: https://repositorio.uam.es/server/api/authn/status
+    status: 200
+    locations:
+    - 'WWW-Authenticate: shibboleth realm="DSpace REST API", location=".../Shibboleth.sso/Login?..."'
+  corroboration:
+    resolved_ip: 150.244.214.23
+    ip_owner: 'inetnum 150.244.0.0 - 150.244.255.255, netname UAM, org ORG-UADM1-RIPE (RIPE legacy)'
+    cname: none
+  note: >-
+    A Shibboleth service provider run by UAM on UAM address space, self-publishing its own
+    metadata and advertising itself from the repository REST API's authentication challenge.
+
+- standard: saml
+  name: SAML 2.0
+  status: conformant
+  x-operator: institution
+  confidence: high
+  evidence:
+  - url: https://repositorio.uam.es/Shibboleth.sso/Metadata
+    status: 200
+    entity: https://repositorio.uam.es/shibboleth
+    locations:
+    - 'md:EntityDescriptor/md:SPSSODescriptor'
+    - 'alg:DigestMethod / alg:SigningMethod extensions'
+    local_copy: identity-federation/uam-repositorio-sp-saml-metadata.xml
+  federation_side:
+    x-operator: federation
+    entity: https://www.rediris.es/sir/uamidp
+    url: >-
+      https://technical.edugain.org/api.php?action=show_entity&entityid=https%3A%2F%2Fwww.rediris.es%2Fsir%2Fuamidp&format=json
+    status: 200
+    locations:
+    - 'shibmd:Scope = uam.es'
+    - 'mdui:DisplayName = Universidad Autonoma de Madrid'
+    - 'md:OrganizationURL = https://www.uam.es/'
+    - 'assurance-certification = https://refeds.org/sirtfi'
+    - 'entity-category-support = http://refeds.org/category/research-and-scholarship'
+    federation: SIR (Servicio de Identidad de RedIRIS), eduGAIN participant
+    local_copy: identity-federation/uam-idp-saml-metadata.xml
+  note: >-
+    SAML conformance is demonstrated twice and the two halves have different operators. The
+    service provider is UAM's own. The identity provider is UAM's identity published through
+    RedIRIS's national federation service, with SSO and SLO terminating on sir.rediris.es -
+    recorded as federation, never deleted, because a federation entry is shared by definition
+    and the asserted identity is UAM's.
+
+- standard: lti
+  name: IMS LTI 1.3 / LTI Advantage
+  status: conformant
+  x-operator: institution
+  confidence: high
+  evidence:
+  - url: https://moodle.uam.es/mod/lti/certs.php
+    status: 200
+    content_type: application/json; charset=utf-8
+    locations:
+    - 'keys[0].kty = RSA, alg = RS256, use = sig, kid = 3ef1afab74110b0d11ed'
+    local_copy: examples/uam-moodle-lti-jwks-example.json
+  - url: https://moodle.uam.es/mod/lti/auth.php
+    status: 200
+    locations:
+    - 'LTI 1.3 platform OIDC authorization endpoint (Moodle mod_lti)'
+  - url: https://moodle.uam.es/mod/lti/token.php
+    status: 400
+    method: POST
+    locations:
+    - 'JSON body {"error":"invalid_request"} - LTI Advantage access-token service responding'
+  - url: https://posgrado.uam.es/mod/lti/certs.php
+    status: 200
+    locations:
+    - 'second UAM Moodle instance (Posgrado) publishing its own LTI 1.3 JWKS'
+  corroboration:
+    moodle_grado_ip: 150.244.214.5
+    moodle_posgrado_ip: 150.244.214.56
+    ip_owner: 'netname UAM, org ORG-UADM1-RIPE'
+  note: >-
+    UAM operates two self-hosted Moodle learning platforms (Grado 2026/27 and Posgrado), both
+    acting as LTI 1.3 platforms and both publishing live public signing keys. The keys are
+    UAM's, generated by UAM's installation - this is not a vendor's shared document. Tool
+    registration is administrative, so the surface is conformant but not openly consumable.
+
+- standard: crossref
+  name: Crossref
+  status: conformant
+  x-operator: registry
+  confidence: high
+  evidence:
+  - url: https://api.crossref.org/members/6788
+    status: 200
+    locations:
+    - 'message.primary-name = "Servicio de Publicaciones de la Universidad Autonoma de Madrid"'
+    - 'message.prefixes = ["10.15366"]'
+    - 'message.counts.total-dois = 10886 (current 1557, backfile 9329)'
+  related:
+  - url: https://api.crossref.org/members/10309
+    status: 200
+    member: 'FUAM (Fundacion Universidad Autonoma de Madrid), prefix 10.24217, 390 DOIs'
+    x-operator: registry
+    note: >-
+      A legally separate foundation with its own ROR record (https://ror.org/021swvv53,
+      fuam.es). Listed for completeness, not counted as the university's own membership.
+  note: >-
+    UAM's publications service is a Crossref member and mints DOIs under prefix 10.15366,
+    predominantly for the journals hosted on revistas.uam.es. Recorded as a registry
+    membership: it is a fact about UAM, and Crossref's own contract is not stored here.
+
+not_evidenced:
+- standard: scim
+  checked: 'No SCIM discovery endpoint found on any reachable UAM host; ID-UAM publishes no metadata.'
+- standard: oneroster
+  checked: 'No IMS OneRoster endpoint found on moodle.uam.es, posgrado.uam.es or secretaria-virtual.uam.es.'
+- standard: ed-fi
+  checked: 'Ed-Fi is a US K-12 / state-agency standard with no expected footprint at a Spanish university.'
+- standard: caliper
+  checked: 'No Caliper Analytics event store or sensor endpoint advertised by either Moodle instance.'
+- standard: qti
+  checked: 'No QTI import/export or delivery endpoint reachable anonymously.'
+- standard: orcid
+  checked: >-
+    No ORCID member API integration or ORCID consortium membership could be evidenced from a
+    UAM host. UAM's research portal at portalcientifico.uam.es, where such an integration would
+    normally live, resolves to 45.151.245.19 - outside UAM address space - and does not complete
+    a TLS connection (curl 28, timeout at 45s), so it could not be read.
+- standard: datacite
+  checked: >-
+    https://api.datacite.org/clients queried for "uam" and "autonoma" returned zero matching
+    repositories, and no DataCite provider record was found. Biblos-e Archivo issues Handle
+    persistent identifiers rather than DOIs.
+
+related_identifiers:
+- scheme: Handle System
+  prefix: '10486'
+  x-operator: registry
+  evidence:
+    url: https://hdl.handle.net/api/handles/10486/1
+    status: 200
+    locations:
+    - 'responseCode 1'
+    - 'values[0].type = URL, data.value = https://repositorio.uam.es/handle/10486/1'
+  note: >-
+    Handle prefix 10486 is registered and resolves to Biblos-e Archivo. Not in the education
+    regime standards list, recorded because it is the persistent-identifier scheme UAM
+    actually operates in place of DOIs for repository content.
+- scheme: ROR
+  id: https://ror.org/01cby8j38
+  x-operator: registry
+  evidence:
+    url: https://api.ror.org/organizations?query=Universidad+Autonoma+de+Madrid
+    status: 200
+    locations:
+    - 'items[0].id = https://ror.org/01cby8j38'
+    - 'ror_display (es) = Universidad Autonoma de Madrid'
+    - 'links[type=website] = https://www.uam.es'
+  note: 'Research Organization Registry identifier for the institution.'

@@ -1,0 +1,206 @@
+{
+  "dspaceUI" : "https://repositorio.uam.es",
+  "dspaceName" : "Biblos-e Archivo. Repositorio Institucional de la UAM",
+  "dspaceServer" : "https://repositorio.uam.es/server",
+  "dspaceVersion" : "DSpace 7.6.5",
+  "type" : "root",
+  "_links" : {
+    "actuator" : {
+      "href" : "https://repositorio.uam.es/server/actuator"
+    },
+    "authn" : {
+      "href" : "https://repositorio.uam.es/server/api/authn"
+    },
+    "authorizations" : {
+      "href" : "https://repositorio.uam.es/server/api/authz/authorizations"
+    },
+    "bitstreamformats" : {
+      "href" : "https://repositorio.uam.es/server/api/core/bitstreamformats"
+    },
+    "bitstreams" : {
+      "href" : "https://repositorio.uam.es/server/api/core/bitstreams"
+    },
+    "browses" : {
+      "href" : "https://repositorio.uam.es/server/api/discover/browses"
+    },
+    "bulkaccessconditionoptions" : {
+      "href" : "https://repositorio.uam.es/server/api/config/bulkaccessconditionoptions"
+    },
+    "bundles" : {
+      "href" : "https://repositorio.uam.es/server/api/core/bundles"
+    },
+    "claimedtasks" : {
+      "href" : "https://repositorio.uam.es/server/api/workflow/claimedtasks"
+    },
+    "claimedtasks-search" : {
+      "href" : "https://repositorio.uam.es/server/api/workflow/claimedtasks/search"
+    },
+    "collections" : {
+      "href" : "https://repositorio.uam.es/server/api/core/collections"
+    },
+    "communities" : {
+      "href" : "https://repositorio.uam.es/server/api/core/communities"
+    },
+    "discover" : {
+      "href" : "https://repositorio.uam.es/server/api/discover"
+    },
+    "dso" : {
+      "href" : "https://repositorio.uam.es/server/api/dso/find{?uuid}",
+      "templated" : true
+    },
+    "entitytypes" : {
+      "href" : "https://repositorio.uam.es/server/api/core/entitytypes"
+    },
+    "eperson-registration" : {
+      "href" : "https://repositorio.uam.es/server/api/eperson/registrations"
+    },
+    "epersons" : {
+      "href" : "https://repositorio.uam.es/server/api/eperson/epersons"
+    },
+    "externalsources" : {
+      "href" : "https://repositorio.uam.es/server/api/integration/externalsources"
+    },
+    "features" : {
+      "href" : "https://repositorio.uam.es/server/api/authz/features"
+    },
+    "feedbacks" : {
+      "href" : "https://repositorio.uam.es/server/api/tools/feedbacks"
+    },
+    "groups" : {
+      "href" : "https://repositorio.uam.es/server/api/eperson/groups"
+    },
+    "identifiers" : {
+      "href" : "https://repositorio.uam.es/server/api/pid/identifiers"
+    },
+    "itemrequests" : {
+      "href" : "https://repositorio.uam.es/server/api/tools/itemrequests"
+    },
+    "items" : {
+      "href" : "https://repositorio.uam.es/server/api/core/items"
+    },
+    "itemtemplates" : {
+      "href" : "https://repositorio.uam.es/server/api/core/itemtemplates"
+    },
+    "metadatafields" : {
+      "href" : "https://repositorio.uam.es/server/api/core/metadatafields"
+    },
+    "metadataschemas" : {
+      "href" : "https://repositorio.uam.es/server/api/core/metadataschemas"
+    },
+    "oidc" : {
+      "href" : "https://repositorio.uam.es/server/api/authn"
+    },
+    "pid" : {
+      "href" : "https://repositorio.uam.es/server/api/pid/find{?id}",
+      "templated" : true
+    },
+    "pooltasks" : {
+      "href" : "https://repositorio.uam.es/server/api/workflow/pooltasks"
+    },
+    "pooltasks-search" : {
+      "href" : "https://repositorio.uam.es/server/api/workflow/pooltasks/search"
+    },
+    "processes" : {
+      "href" : "https://repositorio.uam.es/server/api/system/processes"
+    },
+    "properties" : {
+      "href" : "https://repositorio.uam.es/server/api/config/properties"
+    },
+    "registrations" : {
+      "href" : "https://repositorio.uam.es/server/api/eperson/registrations"
+    },
+    "relationships" : {
+      "href" : "https://repositorio.uam.es/server/api/core/relationships"
+    },
+    "relationshiptypes" : {
+      "href" : "https://repositorio.uam.es/server/api/core/relationshiptypes"
+    },
+    "resourcepolicies" : {
+      "href" : "https://repositorio.uam.es/server/api/authz/resourcepolicies"
+    },
+    "resourcepolicies-search" : {
+      "href" : "https://repositorio.uam.es/server/api/authz/resourcepolicies/search"
+    },
+    "scripts" : {
+      "href" : "https://repositorio.uam.es/server/api/system/scripts"
+    },
+    "self" : {
+      "href" : "https://repositorio.uam.es/server/api"
+    },
+    "sites" : {
+      "href" : "https://repositorio.uam.es/server/api/core/sites"
+    },
+    "statistics" : {
+      "href" : "https://repositorio.uam.es/server/api/statistics"
+    },
+    "submissionaccessoptions" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissionaccessoptions"
+    },
+    "submissioncclicenseUrls" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissioncclicenseUrls"
+    },
+    "submissioncclicenseUrls-search" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissioncclicenseUrls/search"
+    },
+    "submissioncclicenses" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissioncclicenses"
+    },
+    "submissiondefinitions" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissiondefinitions"
+    },
+    "submissionforms" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissionforms"
+    },
+    "submissionsections" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissionsections"
+    },
+    "submissionuploads" : {
+      "href" : "https://repositorio.uam.es/server/api/config/submissionuploads"
+    },
+    "subscriptions" : {
+      "href" : "https://repositorio.uam.es/server/api/core/subscriptions"
+    },
+    "subscriptions-search" : {
+      "href" : "https://repositorio.uam.es/server/api/core/subscriptions/search"
+    },
+    "supervisionorders" : {
+      "href" : "https://repositorio.uam.es/server/api/core/supervisionorders"
+    },
+    "systemwidealerts" : {
+      "href" : "https://repositorio.uam.es/server/api/system/systemwidealerts"
+    },
+    "usagereports" : {
+      "href" : "https://repositorio.uam.es/server/api/statistics/usagereports"
+    },
+    "versionhistories" : {
+      "href" : "https://repositorio.uam.es/server/api/versioning/versionhistories"
+    },
+    "versions" : {
+      "href" : "https://repositorio.uam.es/server/api/versioning/versions"
+    },
+    "vocabularies" : {
+      "href" : "https://repositorio.uam.es/server/api/submission/vocabularies"
+    },
+    "vocabularyEntryDetails" : {
+      "href" : "https://repositorio.uam.es/server/api/submission/vocabularyEntryDetails"
+    },
+    "vocabularyEntryDetails-search" : {
+      "href" : "https://repositorio.uam.es/server/api/submission/vocabularyEntryDetails/search"
+    },
+    "workflowactions" : {
+      "href" : "https://repositorio.uam.es/server/api/config/workflowactions"
+    },
+    "workflowdefinitions" : {
+      "href" : "https://repositorio.uam.es/server/api/config/workflowdefinitions"
+    },
+    "workflowitems" : {
+      "href" : "https://repositorio.uam.es/server/api/workflow/workflowitems"
+    },
+    "workflowsteps" : {
+      "href" : "https://repositorio.uam.es/server/api/config/workflowsteps"
+    },
+    "workspaceitems" : {
+      "href" : "https://repositorio.uam.es/server/api/submission/workspaceitems"
+    }
+  }
+}

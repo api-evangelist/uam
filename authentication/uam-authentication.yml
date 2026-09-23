@@ -1,0 +1,151 @@
+specification: API Evangelist Authentication
+specificationVersion: '0.1'
+provider: Autonomous University of Madrid
+providerId: uam
+generated: '2026-09-01'
+method: probed
+source: >-
+  https://repositorio.uam.es/server/api/authn/status (200, WWW-Authenticate header captured),
+  https://repositorio.uam.es/server/api (200, anonymous read),
+  https://repositorio.uam.es/Shibboleth.sso/Metadata (200),
+  https://repositorio.uam.es/Shibboleth.sso/DiscoFeed (200),
+  https://repositorio.uam.es/server/oai/request?verb=Identify (200, anonymous),
+  https://revistas.uam.es/index.php/index/oai?verb=Identify (200, anonymous, plain UA),
+  https://moodle.uam.es/webservice/rest/server.php (200, Moodle invalidtoken exception),
+  https://moodle.uam.es/mod/lti/token.php (400 invalid_request, POST),
+  https://moodle.uam.es/mod/lti/certs.php (200), https://id.uam.es/ (200 HTML) and four
+  metadata paths under id.uam.es (all 404). All fetched 2026-09-01.
+description: >-
+  Authentication posture across every Universidad Autonoma de Madrid surface reachable from the
+  open internet. UAM's pattern is the opposite of the common one in this cohort: its
+  machine-readable surfaces are anonymously readable, and the gated surfaces publish no
+  machine-readable contract at all. There is no developer program, no API key issuance, no
+  OAuth client registration and no self-service onboarding anywhere in the estate. An
+  unaffiliated caller can harvest the repository and the journals portal today without
+  credentials; everything beyond read access is bound to institutional identity through
+  Shibboleth, and institutional identity is only issued to members of the university.
+
+schemes:
+- name: Anonymous read (institutional repository and journals portal)
+  type: none
+  x-operator: institution
+  x-access: public
+  applies_to:
+  - https://repositorio.uam.es/server/api
+  - https://repositorio.uam.es/server/oai/request
+  - https://repositorio.uam.es/server/opensearch/service
+  - https://revistas.uam.es/index.php/index/oai
+  observed: >-
+    All five endpoints return full payloads to an unauthenticated client. The DSpace REST API
+    sets a DSPACE-XSRF-COOKIE and requires the paired DSPACE-XSRF-TOKEN header for state-changing
+    requests, but read operations need nothing.
+  rate_limit_observed: none
+  note: >-
+    This is the whole of UAM's publicly consumable API surface, and it is real. No key, no
+    registration, no terms acceptance.
+
+- name: Shibboleth / SAML 2.0 (Biblos-e Archivo REST API)
+  type: saml
+  x-operator: institution
+  x-access: gated
+  challenge_url: https://repositorio.uam.es/server/api/authn/status
+  challenge_status: 200
+  www_authenticate: >-
+    shibboleth realm="DSpace REST API",
+    location="https://repositorio.uam.es/Shibboleth.sso/Login?target=https%3A%2F%2Frepositorio.uam.es%2Fserver%2Fapi%2Fauthn%2Fshibboleth",
+    ip realm="DSpace REST API", password realm="DSpace REST API"
+  methods_advertised:
+  - shibboleth
+  - ip
+  - password
+  sp_entity_id: https://repositorio.uam.es/shibboleth
+  sp_metadata: https://repositorio.uam.es/Shibboleth.sso/Metadata
+  discovery_feed: https://repositorio.uam.es/Shibboleth.sso/DiscoFeed
+  idp_offered:
+  - IDP_UAM
+  self_service: false
+  onboarding: >-
+    Write access to Biblos-e Archivo requires a UAM institutional account asserted through
+    Shibboleth, or a password account created by the repository administrators. There is no
+    external registration path.
+
+- name: UAM federated identity in SIR / eduGAIN
+  type: saml
+  x-operator: federation
+  x-access: gated
+  entity_id: https://www.rediris.es/sir/uamidp
+  sso_endpoint: https://sir.rediris.es/uam/saml2/idp/SSOService.php
+  slo_endpoint: https://sir.rediris.es/uam/saml2/idp/SingleLogoutService.php
+  scope: uam.es
+  sirtfi: true
+  entity_categories:
+  - http://refeds.org/category/research-and-scholarship
+  detail: identity-federation/uam-identity-federation.yml
+  note: >-
+    The identity is UAM's; the IdP endpoints and the metadata are operated for UAM by RedIRIS
+    inside Spain's national R&E federation. Recorded, never deleted.
+
+- name: LTI 1.3 / LTI Advantage platform (Moodle)
+  type: oauth2
+  subtype: 'client_credentials with private_key_jwt (IMS Security Framework)'
+  x-operator: institution
+  x-access: gated
+  jwks_uri: https://moodle.uam.es/mod/lti/certs.php
+  authorization_endpoint: https://moodle.uam.es/mod/lti/auth.php
+  token_endpoint: https://moodle.uam.es/mod/lti/token.php
+  token_endpoint_probe: 'POST -> 400 {"error":"invalid_request"}'
+  second_instance_jwks: https://posgrado.uam.es/mod/lti/certs.php
+  signing_algorithms:
+  - RS256
+  self_service: false
+  onboarding: >-
+    An LTI tool exists only if a UAM Moodle administrator registers it and issues a client_id
+    and deployment_id. There is no dynamic registration endpoint and no public tool catalogue.
+
+- name: Moodle Web Services (REST)
+  type: apiKey
+  in: query
+  parameter_name: wstoken
+  x-operator: institution
+  x-access: gated
+  endpoint: https://moodle.uam.es/webservice/rest/server.php
+  probe_status: 200
+  probe_body: >-
+    <EXCEPTION class="core\exception\moodle_exception"><ERRORCODE>invalidtoken</ERRORCODE>
+    <MESSAGE>Ficha (token) no valida - ficha no encontrada</MESSAGE></EXCEPTION>
+  self_service: false
+  onboarding: >-
+    The web services subsystem is enabled and answering, which is a real finding - most
+    institutional Moodles return a disabled-service error instead. Tokens are issued only to
+    accounts a UAM administrator has authorised for a named external service.
+
+- name: ID-UAM single sign-on
+  type: proprietary
+  x-operator: institution
+  x-access: gated
+  url: https://id.uam.es/
+  status: 200
+  machine_readable_metadata: none
+  checked:
+  - path: /idp/shibboleth
+    status: 404
+  - path: /simplesaml/saml2/idp/metadata.php
+    status: 404
+  - path: /Shibboleth.sso/Metadata
+    status: 404
+  - path: /idp/profile/Metadata/SAML
+    status: 404
+  note: >-
+    ID-UAM is the university's account and sign-on service for students and staff. It is live
+    but publishes no OIDC discovery document and no SAML metadata at any conventional path, so
+    it is catalogued as a sign-on surface rather than as an API.
+
+developer_program:
+  exists: false
+  portal: none
+  key_issuance: none
+  terms_of_service: not published for any API surface
+  note: >-
+    No developer portal, no API terms, no key or client registration exists anywhere on the
+    uam.es estate. The public surfaces need no credential and the credentialled surfaces are
+    reachable only through institutional identity.

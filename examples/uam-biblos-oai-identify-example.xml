@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="static/style.xsl"?><OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"><responseDate>2026-09-01T19:29:09Z</responseDate><request verb="Identify">https://repositorio.uam.es/server/oai/request</request><Identify><repositoryName>Biblos-e Archivo. Repositorio Institucional de la UAM</repositoryName><baseURL>https://repositorio.uam.es/server/oai/request</baseURL><protocolVersion>2.0</protocolVersion><adminEmail>biblosearchivo.biblioteca@uam.es</adminEmail><earliestDatestamp>2009-01-17T23:00:00Z</earliestDatestamp><deletedRecord>transient</deletedRecord><granularity>YYYY-MM-DDThh:mm:ssZ</granularity><description><oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
+<scheme>oai</scheme>
+<repositoryIdentifier>repositorio.uam.es</repositoryIdentifier>
+<delimiter>:</delimiter>
+<sampleIdentifier>oai:repositorio.uam.es:10486/1234</sampleIdentifier>
+</oai-identifier></description></Identify></OAI-PMH>

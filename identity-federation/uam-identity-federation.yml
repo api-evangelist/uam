@@ -1,0 +1,139 @@
+specification: API Evangelist Identity Federation
+specificationVersion: '0.1'
+provider: Autonomous University of Madrid
+providerId: uam
+generated: '2026-09-01'
+method: probed
+source: >-
+  eduGAIN technical database action=list_entities (HTTP 200, 7,811,988 bytes) scanned for
+  every entity scoped to uam.es; the SAML 2.0 EntityDescriptor served by
+  https://technical.edugain.org/api.php?action=show_entity&entityid=https%3A%2F%2Fwww.rediris.es%2Fsir%2Fuamidp
+  (HTTP 200, text/xml, archived at identity-federation/uam-idp-saml-metadata.xml);
+  https://repositorio.uam.es/Shibboleth.sso/Metadata (HTTP 200,
+  application/samlmetadata+xml, archived at
+  identity-federation/uam-repositorio-sp-saml-metadata.xml);
+  https://repositorio.uam.es/Shibboleth.sso/DiscoFeed (HTTP 200, application/json); and the
+  WWW-Authenticate header returned by https://repositorio.uam.es/server/api/authn/status
+  (HTTP 200). All fetched 2026-09-01.
+description: >-
+  UAM's SAML 2.0 identity-federation surface, with operator settled per entity rather than by
+  hostname. Two sides are present and they have different operators.
+
+  The identity provider side is federation-operated in the strict sense of this pipeline: UAM's
+  IdP is registered in SIR, the Servicio de Identidad de RedIRIS, Spain's national research and
+  education federation and an eduGAIN participant since 2013. The entityID is
+  https://www.rediris.es/sir/uamidp and the SSO and SLO endpoints terminate on
+  sir.rediris.es/uam/saml2/idp/, so the metadata is published by RedIRIS and the IdP is run for
+  UAM on RedIRIS infrastructure. What is unambiguously UAM's is the identity itself: the
+  shibmd:Scope is uam.es, the Organization block points at https://www.uam.es/, and the
+  displayName in both languages is Universidad Autonoma de Madrid. The entity carries the
+  REFEDS Sirtfi assurance certification and the REFEDS Research and Scholarship entity category,
+  and eduGAIN records it as first seen 2017-04-13 with ECCS status 1.
+
+  The service provider side is institution-operated with no qualification. Biblos-e Archivo runs
+  a Shibboleth SP on UAM's own hardware: entityID https://repositorio.uam.es/shibboleth, metadata
+  self-published at /Shibboleth.sso/Metadata, a discovery feed at /Shibboleth.sso/DiscoFeed
+  naming IDP_UAM, and the DSpace REST API itself advertising shibboleth in its WWW-Authenticate
+  header. repositorio.uam.es resolves to 150.244.214.23, inside inetnum 150.244.0.0 -
+  150.244.255.255, netname UAM, org ORG-UADM1-RIPE, descr "Universidad Autonoma de Madrid".
+  That is UAM running SAML on UAM address space.
+
+federation:
+  name: Servicio de Identidad de RedIRIS
+  abbreviation: SIR
+  code: SIR
+  registration_authority: http://www.rediris.es/
+  operator: RedIRIS (Red.es, Spain)
+  contact: sir@rediris.es
+  homepage: https://www.rediris.es/sir/
+  homepage_status: 200
+  interfederation: eduGAIN
+  edugain_production_date: '2011-07-12'
+  edugain_membership_date: '2013-05-31'
+  registration_policy: https://www.rediris.es/sir/edugain/SIR_MRPS.pdf
+  probed: '2026-09-01'
+
+identity_provider:
+  entityID: https://www.rediris.es/sir/uamidp
+  x-operator: federation
+  operator_basis: >-
+    The entityID, the metadata and both SAML endpoints are RedIRIS's:
+    https://sir.rediris.es/uam/saml2/idp/SSOService.php and
+    https://sir.rediris.es/uam/saml2/idp/SingleLogoutService.php, a SimpleSAMLphp IdP that
+    RedIRIS operates per member institution. The asserted identity is UAM's - scope uam.es,
+    OrganizationURL https://www.uam.es/. Recorded as federation rather than tenant because
+    the registering body is the national R&E federation itself, not a commercial platform,
+    and because a federation entry is shared by definition. This relationship is a fact about
+    UAM and is never deleted to tidy up a shared host.
+  display_name_en: Universidad Autonoma de Madrid
+  display_name_es: Universidad Autonoma de Madrid
+  scope: uam.es
+  scope_regexp: false
+  organization_url: https://www.uam.es/
+  registration_authority: http://www.rediris.es/
+  registration_instant: '2010-03-12T12:48:00Z'
+  edugain_first_seen: '2017-04-13 12:58:26'
+  edugain_eccs_status: '1'
+  sirtfi: true
+  assurance_certification: https://refeds.org/sirtfi
+  entity_categories:
+  - http://refeds.org/category/research-and-scholarship
+  bindings:
+  - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+    service: SingleSignOnService
+    location: https://sir.rediris.es/uam/saml2/idp/SSOService.php
+  - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+    service: SingleLogoutService
+    location: https://sir.rediris.es/uam/saml2/idp/SingleLogoutService.php
+  metadata_url: >-
+    https://technical.edugain.org/api.php?action=show_entity&entityid=https%3A%2F%2Fwww.rediris.es%2Fsir%2Fuamidp&format=json
+  metadata_status: 200
+  metadata_content_type: text/xml;charset=UTF-8
+  local_copy: identity-federation/uam-idp-saml-metadata.xml
+
+service_providers:
+- entityID: https://repositorio.uam.es/shibboleth
+  name: Biblos-e Archivo (institutional repository) Shibboleth SP
+  x-operator: institution
+  operator_basis: >-
+    Metadata is self-published by the host itself at
+    https://repositorio.uam.es/Shibboleth.sso/Metadata (HTTP 200,
+    application/samlmetadata+xml). The host resolves to 150.244.214.23 inside UAM's own RIPE
+    legacy allocation 150.244.0.0/16 (netname UAM, org ORG-UADM1-RIPE). No CNAME, no vendor
+    address space, no managed-IdP pattern.
+  metadata_url: https://repositorio.uam.es/Shibboleth.sso/Metadata
+  metadata_status: 200
+  metadata_content_type: application/samlmetadata+xml
+  local_copy: identity-federation/uam-repositorio-sp-saml-metadata.xml
+  discovery_feed: https://repositorio.uam.es/Shibboleth.sso/DiscoFeed
+  discovery_feed_status: 200
+  discovery_feed_entities:
+  - IDP_UAM
+  consuming_api:
+    url: https://repositorio.uam.es/server/api/authn/status
+    status: 200
+    www_authenticate: >-
+      shibboleth realm="DSpace REST API",
+      location="https://repositorio.uam.es/Shibboleth.sso/Login?target=https%3A%2F%2Frepositorio.uam.es%2Fserver%2Fapi%2Fauthn%2Fshibboleth",
+      ip realm="DSpace REST API", password realm="DSpace REST API"
+  note: >-
+    The Shibboleth SP metadata document served here carries the stock shibboleth2.xml comment
+    warning that it is example metadata for review before exchange. It is nonetheless the live
+    metadata handler of a real, running SP, and it is the document a federation partner would
+    fetch. Recorded with that caveat rather than upgraded into a claim UAM does not make.
+
+not_found:
+- host: id.uam.es
+  checked:
+  - path: /idp/shibboleth
+    status: 404
+  - path: /simplesaml/saml2/idp/metadata.php
+    status: 404
+  - path: /Shibboleth.sso/Metadata
+    status: 404
+  - path: /idp/profile/Metadata/SAML
+    status: 404
+  note: >-
+    ID-UAM, the university's single sign-on service, answers 200 on its root but publishes no
+    SAML or OpenID Connect metadata at any conventional path. It is a gated login surface, not
+    a machine-readable identity contract, and is recorded as SingleSignOn rather than as an API.
